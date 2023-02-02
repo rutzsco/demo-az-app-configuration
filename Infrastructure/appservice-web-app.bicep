@@ -1,5 +1,4 @@
 param appName string
-param keyVaultName string
 param location string = resourceGroup().location
 param sku string = 'Shared'
 param skuCode string = 'D1'
@@ -95,20 +94,5 @@ resource app_insights 'microsoft.insights/components@2015-05-01' = {
   }
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = { 
-  name: keyVaultName
-}
-
-// Assign secret user permissions to the Azure Function app
-var keyVaultSecretsUserRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
-resource kvFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(kv.id, app.name, keyVaultSecretsUserRole)
-  scope: kv
-  properties: {
-    principalId: app.identity.principalId
-    principalType: 'ServicePrincipal'
-    roleDefinitionId: keyVaultSecretsUserRole
-  }
-}
 
 output miObjectId string = reference(app.id, '2019-08-01', 'full').identity.principalId
