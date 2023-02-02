@@ -4,13 +4,13 @@ trigger:
     - master
   paths:
     include:
-    - Services/RemoteMonitor.UI.Blazor/*
+    - Services/DemoAPI/*
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  rootDirectory: 'Services/RemoteMonitor.UI.Blazor'
+  rootDirectory: 'Services/DemoAPI'
 
 steps:
 
