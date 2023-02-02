@@ -13,6 +13,7 @@ variables:
   rootDirectory: 'Services/DemoAPI'
   azureSubscription: 'Demo Account'
   resourceGroupName: 'demo-az-app-configuration'
+  webAppName: 'demo-az-app-configuration'
   region: 'eastus'
   vmImageName: 'ubuntu-latest'
 
@@ -49,27 +50,30 @@ stages:
         publishLocation: 'pipeline'
 - stage: Deploy
   displayName: Deploy stage
-
   jobs:
-  - job: Deploy
-    displayName: Deploy
-
-
+    - deployment: Deploy
+      displayName: Deploy
+      environment: Demo
+      pool:
+        vmImage: 'ubuntu-latest'
   
-    steps:
-      - task: AzureCLI@2
-        displayName: '1. Deploy Azure Resources'
-        inputs:
-          azureSubscription: $(azureSubscription)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            az deployment group create --resource-group $(resourceGroupName) --template-file $(Pipeline.Workspace)/build/Infrastructure/main.bicep --parameters appName=$(webAppName) location=$(region) > outputs.json
-
-      - task: AzureRmWebAppDeployment@4
-        displayName: '2. Azure App Service Deploy:'
-        inputs:
-           azureSubscription: $(azureSubscription)
-           WebAppName: $(webAppName)
-           package: '$(Pipeline.Workspace)/build/App/App.zip'
-           AppSettings: ''
+      strategy:
+        runOnce:
+          deploy:
+             steps:
+              - task: AzureCLI@2
+                displayName: '1. Deploy Azure Resources'
+                inputs:
+                  azureSubscription: $(azureSubscription)
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  inlineScript: |
+                    az deployment group create --resource-group $(resourceGroupName) --template-file $(Pipeline.Workspace)/build/Infrastructure/main.bicep --parameters appName=$(webAppName) location=$(region) > outputs.json
+                    
+              - task: AzureRmWebAppDeployment@4
+                displayName: '2. Azure App Service Deploy:'
+                inputs:
+                  azureSubscription: $(azureSubscription)
+                  WebAppName: $(webAppName)
+                  package: '$(Pipeline.Workspace)/build/App/App.zip'
+                  AppSettings: ''
