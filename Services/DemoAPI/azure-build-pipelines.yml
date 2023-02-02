@@ -48,6 +48,7 @@ stages:
         targetPath: ' Infrastructure'
         artifact: 'Infrastructure'
         publishLocation: 'pipeline'
+
 - stage: Deploy
   displayName: Deploy stage
   jobs:
@@ -68,7 +69,7 @@ stages:
                   scriptType: bash
                   scriptLocation: inlineScript
                   inlineScript: |
-                    az deployment group create --resource-group $(resourceGroupName) --template-file $(Pipeline.Workspace)/build/app/Infrastructure/main.bicep --parameters appName=$(webAppName) location=$(region) > outputs.json
+                    az deployment group create --resource-group $(resourceGroupName) --template-file $(Pipeline.Workspace)/Infrastructure/main.bicep --parameters appName=$(webAppName) location=$(region) > outputs.json
                     
               - task: AzureRmWebAppDeployment@4
                 displayName: '2. Azure App Service Deploy:'
