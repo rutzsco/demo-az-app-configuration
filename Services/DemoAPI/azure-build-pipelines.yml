@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-    - master
+    - main
   paths:
     include:
     - Services/DemoAPI/*
@@ -33,6 +33,6 @@ steps:
     publishLocation: 'pipeline'
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: ' $(rootDirectory)/Infrastructure'
+    targetPath: ' Infrastructure'
     artifact: 'Infrastructure'
     publishLocation: 'pipeline'
