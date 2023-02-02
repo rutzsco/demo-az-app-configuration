@@ -62,6 +62,13 @@ stages:
         runOnce:
           deploy:
              steps:
+              - task: CmdLine@2
+                inputs:
+                   script: |
+                     echo "Directory of Pipeline.Workspace:"
+                     tree $(Pipeline.Workspace)
+                displayName: 'Display Variables'
+                continueOnError: true
               - task: AzureCLI@2
                 displayName: '1. Deploy Azure Resources'
                 inputs:
