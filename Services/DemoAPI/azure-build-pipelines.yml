@@ -83,5 +83,5 @@ stages:
                 inputs:
                   azureSubscription: $(azureSubscription)
                   WebAppName: $(webAppName)
-                  package: '$(Pipeline.Workspace)/App/App.zip'
+                  package: '$(Pipeline.Workspace)/App/WebAPI.zip'
                   AppSettings: ''
