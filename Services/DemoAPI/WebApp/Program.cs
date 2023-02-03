@@ -26,6 +26,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
     options.UseFeatureFlags();
 });
 
+
+builder.Services.AddAzureAppConfiguration();
 // Bind configuration "WebApp:Settings" section to the Settings object
 builder.Services.Configure<StyleSettings>(builder.Configuration.GetSection("WebApp:Settings"));
 
@@ -39,6 +41,7 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+app.UseAzureAppConfiguration();
 app.UseStaticFiles();
 
 app.UseRouting();

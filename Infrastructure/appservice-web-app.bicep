@@ -8,7 +8,7 @@ param numberOfWorkers string = '1'
 param currentStack string = 'dotnetcore'
 param environment string = 'Production'
 param applicationInsightsName string = appName
-
+param appConfigurationConnectionString string 
 
 resource app 'Microsoft.Web/sites@2018-02-01' = {
   name: appName
@@ -58,6 +58,10 @@ resource app 'Microsoft.Web/sites@2018-02-01' = {
         {
           name: 'ASPNETCORE_ENVIRONMENT'
           value: environment
+        }
+        {
+          name: 'ConnectionStrings::AppConfig'
+          value: appConfigurationConnectionString
         }
       ]
       metadata: [
