@@ -22,5 +22,6 @@ module app 'appservice-web-app.bicep' = {
   params: {
     location: location
     appName: appName
+    appConfigurationConnectionString: readonlyKey.connectionString
   }
 }
