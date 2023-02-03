@@ -1,16 +1,12 @@
 param appName string
 param location string = resourceGroup().location
-param sku string = 'Shared'
-param skuCode string = 'D1'
-param workerSize string = '0'
-param workerSizeId string = '0'
-param numberOfWorkers string = '1'
-param currentStack string = 'dotnetcore'
+param sku string = 'B1'
+
 param environment string = 'Production'
 param applicationInsightsName string = appName
-param appConfigurationConnectionString string 
+param appConfigurationConnectionString string
 
-resource app 'Microsoft.Web/sites@2018-02-01' = {
+resource app 'Microsoft.Web/sites@2022-03-01' = {
   name: appName
   location: location
   identity: {
@@ -64,33 +60,18 @@ resource app 'Microsoft.Web/sites@2018-02-01' = {
           value: appConfigurationConnectionString
         }
       ]
-      metadata: [
-        {
-          name: 'CURRENT_STACK'
-          value: currentStack
-        }
-      ]
     }
     serverFarmId: hostingPlanName.id
     clientAffinityEnabled: true
     httpsOnly: true
-    alwaysOn: true
   }
 }
 
 resource hostingPlanName 'Microsoft.Web/serverfarms@2018-02-01' = {
   name: appName
   location: location
-  kind: ''
-  properties: {
-    name: appName
-    workerSize: workerSize
-    workerSizeId: workerSizeId
-    numberOfWorkers: numberOfWorkers
-  }
   sku: {
-    Tier: sku
-    Name: skuCode
+    name: sku
   }
 }
 
@@ -102,6 +83,5 @@ resource app_insights 'microsoft.insights/components@2015-05-01' = {
     Application_Type: 'web'
   }
 }
-
 
 output miObjectId string = reference(app.id, '2019-08-01', 'full').identity.principalId
