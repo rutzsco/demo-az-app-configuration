@@ -2,10 +2,6 @@ trigger:
   branches:
     include:
     - main
-  paths:
-    include:
-    - Services/DemoAPI/*
-
 pool:
       vmImage: 'ubuntu-latest'
 
