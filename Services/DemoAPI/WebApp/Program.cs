@@ -19,7 +19,8 @@ builder.Configuration.AddAzureAppConfiguration(options =>
            // Load all keys that start with `TestApp:` and have no label
            .Select("WebApp:*", LabelFilter.Null)
            // Configure to reload configuration if the registered sentinel key is modified
-           .ConfigureRefresh(refreshOptions => refreshOptions.Register("WebApp:Settings:Sentinel", refreshAll: true));
+           .ConfigureRefresh(refreshOptions => refreshOptions.Register("WebApp:Settings:Sentinel", refreshAll: true)
+             .SetCacheExpiration(TimeSpan.FromSeconds(15)));
 
     // Load all feature flags with no label
     options.UseFeatureFlags();
