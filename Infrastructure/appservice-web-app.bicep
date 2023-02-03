@@ -6,6 +6,7 @@ param workerSize string = '0'
 param workerSizeId string = '0'
 param numberOfWorkers string = '1'
 param currentStack string = 'dotnetcore'
+param environment string = 'Production'
 param applicationInsightsName string = appName
 
 
@@ -53,6 +54,10 @@ resource app 'Microsoft.Web/sites@2018-02-01' = {
         {
           name: 'XDT_MicrosoftApplicationInsights_BaseExtensions'
           value: 'disabled'
+        }
+        {
+          name: 'ASPNETCORE_ENVIRONMENT'
+          value: environment
         }
       ]
       metadata: [
