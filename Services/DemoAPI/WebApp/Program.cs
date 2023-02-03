@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using Microsoft.FeatureManagement;
 using WebApp.Models.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +13,23 @@ builder.Services.AddControllersWithViews();
 string connectionString = builder.Configuration.GetConnectionString("AppConfig");
 
 // Load configuration from Azure App Configuration
-builder.Configuration.AddAzureAppConfiguration(connectionString);
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    options.Connect(connectionString)
+           // Load all keys that start with `TestApp:` and have no label
+           .Select("WebApp:*", LabelFilter.Null)
+           // Configure to reload configuration if the registered sentinel key is modified
+           .ConfigureRefresh(refreshOptions => refreshOptions.Register("WebApp:Settings:Sentinel", refreshAll: true));
+
+    // Load all feature flags with no label
+    options.UseFeatureFlags();
+});
+
+// Bind configuration "WebApp:Settings" section to the Settings object
 builder.Services.Configure<StyleSettings>(builder.Configuration.GetSection("WebApp:Settings"));
+
+// Add feature management to the container of services.
+builder.Services.AddFeatureManagement();
 
 var app = builder.Build();
 
