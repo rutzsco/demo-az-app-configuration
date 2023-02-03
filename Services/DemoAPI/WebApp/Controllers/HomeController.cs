@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using WebApp.Models;
+using WebApp.Models.Settings;
 
 namespace WebApp.Controllers
 {
@@ -8,14 +10,17 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly StyleSettings _settings;
+
+        public HomeController(IOptionsSnapshot<StyleSettings> options, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _settings = options.Value;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(new IndexViewModel(_settings));
         }
 
         public IActionResult Privacy()
