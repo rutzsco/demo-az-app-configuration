@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
 using WebApp.Models.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,13 +27,17 @@ builder.Configuration.AddAzureAppConfiguration(options =>
     options.UseFeatureFlags();
 });
 
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAzureAppConfiguration();
 // Bind configuration "WebApp:Settings" section to the Settings object
 builder.Services.Configure<StyleSettings>(builder.Configuration.GetSection("WebApp:Settings"));
 
 // Add feature management to the container of services.
 builder.Services.AddFeatureManagement();
+
+// Add feature management, targeting filter, and ITargetingContextAccessor to service collection
+builder.Services.AddFeatureManagement().AddFeatureFilter<TargetingFilter>();
+builder.Services.AddSingleton<ITargetingContextAccessor, TestTargetingContextAccessor>();
 
 var app = builder.Build();
 
