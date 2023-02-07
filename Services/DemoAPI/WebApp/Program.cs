@@ -62,7 +62,7 @@ builder.Services.AddFeatureManagement();
 
 // Add feature management, targeting filter, and ITargetingContextAccessor to service collection
 builder.Services.AddFeatureManagement().AddFeatureFilter<TargetingFilter>();
-//builder.Services.AddSingleton<ITargetingContextAccessor, TestTargetingContextAccessor>();
+builder.Services.AddSingleton<ITargetingContextAccessor, TestTargetingContextAccessor>();
 
 var app = builder.Build();
 
