@@ -17,7 +17,6 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddAuthorization(options =>
-
 {
     options.FallbackPolicy = options.DefaultPolicy;
 });
@@ -47,8 +46,6 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 
     // Load all feature flags with no label
     options.UseFeatureFlags();
-
-
 });
 
 
