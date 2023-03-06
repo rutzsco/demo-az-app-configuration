@@ -58,7 +58,10 @@ builder.Services.Configure<StyleSettings>(builder.Configuration.GetSection("WebA
 builder.Services.AddFeatureManagement();
 
 // Add feature management, targeting filter, and ITargetingContextAccessor to service collection
-builder.Services.AddFeatureManagement().AddFeatureFilter<TargetingFilter>();
+builder.Services.AddFeatureManagement()
+    .AddFeatureFilter<TargetingFilter>()
+    .AddFeatureFilter<PercentageFilter>();
+
 builder.Services.AddSingleton<ITargetingContextAccessor, TestTargetingContextAccessor>();
 
 var app = builder.Build();

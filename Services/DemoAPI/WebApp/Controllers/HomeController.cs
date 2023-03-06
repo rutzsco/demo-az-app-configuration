@@ -27,15 +27,18 @@ namespace WebApp.Controllers
             _featureManagerSnapshot = featureManagerSnapshot;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(new IndexViewModel(_settings));
+            var isBetaEnabled = await _featureManagerSnapshot.IsEnabledAsync("Beta");
+            var isFeature1Enabled = await _featureManagerSnapshot.IsEnabledAsync("Feature1");
+            return View(new IndexViewModel(_settings, isFeature1Enabled, isBetaEnabled));
         }
 
         public async Task<IActionResult> Demo1Async()
         {
+            var a = _featureManagerSnapshot.GetFeatureNamesAsync();
             var isEnabled = await _featureManagerSnapshot.IsEnabledAsync("Beta");
-
+            var isFeature1Enabled = await _featureManagerSnapshot.IsEnabledAsync("Feature1");
 
             TargetingContext targetingContext = new TargetingContext
             {

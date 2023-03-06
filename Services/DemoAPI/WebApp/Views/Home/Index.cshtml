@@ -15,3 +15,22 @@
 </style>
 
 <h1>@Model.Settings.Message</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Feature</th>
+            <th scope="col">Last</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Feature1</td>
+            <td>@Model.IsEnabledFeature1</td>
+        </tr>
+         <tr>
+            <td>Beta</td>
+            <td>@Model.IsEnabledBeta</td>
+        </tr>
+    </tbody>
+</table>
